@@ -21,13 +21,23 @@ protected:
 
 	void moveForward(float amount);
 	void moveRight(float amount);
+	void turn(float amount);
+	void lookUp(float amount);
+	void shoot();
 
 	class UFloatingPawnMovement* FloatingPawnMovement;
+
+	UPROPERTY(EditAnywhere, Category = "Shooting")
+		TSubclassOf<class ABullet> BulletClass;
+
 	UPROPERTY(EditAnywhere, Category = "Components")
 		UStaticMeshComponent* StaticMesh;
 
 	UPROPERTY(EditAnywhere, Category = "Components")
 		class UCameraComponent* Camera;
+
+	UPROPERTY(EditAnywhere, Category = "Components")
+		class USpringArmComponent* CameraArm;
 
 public:	
 	// Called every frame
