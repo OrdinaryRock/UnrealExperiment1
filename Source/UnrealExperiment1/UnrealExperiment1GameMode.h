@@ -13,6 +13,11 @@ class AUnrealExperiment1GameMode : public AGameModeBase
 
 public:
 	AUnrealExperiment1GameMode();
+
+	void OnTargetHit();
+
+	UPROPERTY(EditAnywhere, Category = "Game Rules")
+	int32 PointsToWin;
 };
 
 

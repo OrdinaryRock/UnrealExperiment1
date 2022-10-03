@@ -13,17 +13,23 @@ ASpherePawn::ASpherePawn()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Create all of our components
 	FloatingPawnMovement = CreateDefaultSubobject<UFloatingPawnMovement>("PawnMovement");
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
-	CameraArm = CreateDefaultSubobject<USpringArmComponent>("CameraSpringArm");
-	CameraArm->SetupAttachment(StaticMesh);
-	CameraArm->TargetArmLength = 500.f;
-	Camera = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
-	Camera->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
-	Camera->SetupAttachment(CameraArm);
 	
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
+	
+	CameraArm = CreateDefaultSubobject<USpringArmComponent>("CameraSpringArm");
+	CameraArm->SetupAttachment(StaticMesh); // Attach the spring arm to the mesh
+	CameraArm->TargetArmLength = 500.f; // The maximum length of the boom arm
+	
+	Camera = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
+	Camera->SetRelativeLocation(FVector(0.f, 0.f, 0.f)); // Initialize the camera's relative position
+	Camera->SetupAttachment(CameraArm); // Attach the camera to the spring arm
+	
+	// Set the mesh as the root of this actor
 	SetRootComponent(StaticMesh);
 
+	// The rotation of this actor will mimic the rotation of the pawn movement controller
 	bUseControllerRotationYaw = true;
 	bUseControllerRotationPitch = true;
 }
@@ -58,17 +64,20 @@ void ASpherePawn::lookUp(float amount)
 void ASpherePawn::shoot()
 {
 	if (BulletClass) {
+		// Create spawn parameters for the bullet
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::Undefined;
 		SpawnParams.bNoFail = true;
 		SpawnParams.Owner = this;
 		SpawnParams.Instigator = this;
 
+		// Spawn position for the bullet
 		FTransform BulletSpawnTransform;
 		BulletSpawnTransform.SetLocation(GetActorForwardVector() * 500.f + GetActorLocation());
 		BulletSpawnTransform.SetRotation(GetActorRotation().Quaternion());
-		BulletSpawnTransform.SetScale3D(FVector(1.f));
+		BulletSpawnTransform.SetScale3D(FVector(1.f)); // Probably unnecessary
 
+		// Spawn the bullet into the world
 		GetWorld()->SpawnActor<ABullet>(BulletClass, BulletSpawnTransform, SpawnParams);
 	}
 }
@@ -85,11 +94,13 @@ void ASpherePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	// Movement Input
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASpherePawn::moveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASpherePawn::moveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &ASpherePawn::turn);
 	PlayerInputComponent->BindAxis("LookUp", this, &ASpherePawn::lookUp);
 
+	// Action Input
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ASpherePawn::shoot);
 
 }
