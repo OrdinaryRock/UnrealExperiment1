@@ -19,6 +19,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void moveForward(float amount);
+	void moveRight(float amount);
+
+	class UFloatingPawnMovement* FloatingPawnMovement;
+	UPROPERTY(EditAnywhere, Category = "Components")
+		UStaticMeshComponent* StaticMesh;
+
+	UPROPERTY(EditAnywhere, Category = "Components")
+		class UCameraComponent* Camera;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

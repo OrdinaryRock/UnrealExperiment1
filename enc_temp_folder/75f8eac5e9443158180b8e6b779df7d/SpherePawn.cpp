@@ -3,7 +3,7 @@
 
 #include "SpherePawn.h"
 #include "GameFramework/FloatingPawnMovement.h"
-#include "Camera/CameraComponent.h"
+#include "Camera/CameraComponent.h";
 
 // Sets default values
 ASpherePawn::ASpherePawn()
@@ -49,8 +49,7 @@ void ASpherePawn::Tick(float DeltaTime)
 void ASpherePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASpherePawn::moveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ASpherePawn::moveRight);
+	PlayerInputComponent->BindAxis("MoveForward", this, &ASpherePawn::moveRight);
 }
 

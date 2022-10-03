@@ -2,7 +2,7 @@
 
 
 #include "CustomActor.h"
-#include "Components/StaticMeshComponent.h"
+#include "Classes/Components/StaticMeshComponent.h"
 
 // Sets default values
 ACustomActor::ACustomActor()
